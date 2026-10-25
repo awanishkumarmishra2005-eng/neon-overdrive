@@ -121,14 +121,28 @@ export function updateVehicleMode(
       }
       dyn.drifting = false
 
-      let target = 0
-      if (f.landingAssist) {
-        if (input.up && !f.forcedLanding) { f.landingAssist = false; message = 'Landing assist cancelled' }
-        else target = -clamp(f.y * cfg.assistGain, cfg.assistMinDescent, cfg.assistMaxDescent)
+            let target = 0
+
+      // Allow manual ascent to cancel landing assist, except during forced landing.
+      if (f.landingAssist && input.up && !f.forcedLanding) {
+        f.landingAssist = false
+        message = 'Landing assist cancelled'
       }
-      if (!f.landingAssist) {
+
+      if (f.landingAssist) {
+        target = -clamp(
+          f.y * cfg.assistGain,
+          cfg.assistMinDescent,
+          cfg.assistMaxDescent,
+        )
+      } else {
         const lift = (input.up ? 1 : 0) - (input.down ? 1 : 0)
-        target = lift > 0 ? cfg.climbRate : lift < 0 ? -cfg.descendRate : 0
+        target =
+          lift > 0
+            ? cfg.climbRate
+            : lift < 0
+              ? -cfg.descendRate
+              : 0
       }
       const maxDv = cfg.liftAccel * dt
       f.vy += clamp(target - f.vy, -maxDv, maxDv)
