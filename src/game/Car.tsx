@@ -140,7 +140,7 @@ const Car = forwardRef<THREE.Group>((_, ref) => {
         }
       }
     }
-    if (hitRival && !touchingRival) {
+    if (hitRival && !touchingRival.current) {
       vehicleState.collisionCount += 1
       showMessage(`RIVAL COLLISION ${vehicleState.collisionCount}/2`, 1800)
       playGameTone(82, .28, 'sawtooth', .11)
