@@ -1,7 +1,7 @@
 // ===== SKYLINE ONE FLIGHT TUNING (fictional arcade values, SI units) =====
 export const FLIGHT_CONFIG = {
   transformTime: 0.65,     // s   quick transformation animation length
-  maxFlightSeconds: 3,     // s   each free flight activation lasts 3 seconds, then landing is mandatory
+  maxFlightSeconds: 30,     // s   each free flight activation lasts 3 seconds, then landing is mandatory
   roadY: 0.4,              // m   car group height when on the road (ride height)
 
   thrust: 22,              // m/s^2 forward acceleration in the air
