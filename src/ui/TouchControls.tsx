@@ -1,4 +1,4 @@
-
+import { campaignRuntime } from '../game/campaign'
 import { useEffect, useState } from 'react'
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
 import { IS_MOBILE } from '../config/device'
