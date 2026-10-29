@@ -1,4 +1,4 @@
-import { campaignRuntime } from '../game/campaign'
+
 import { useEffect, useState } from 'react'
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
 import { IS_MOBILE } from '../config/device'
@@ -121,7 +121,7 @@ export default function TouchControls() {
       if (document.hidden) releaseAllTouch()
     }
 
-    // Allow menu scrolling; prevent page scrolling only during a race.
+    // Permit menu scrolling; prevent page scrolling during a race.
     const stopMove = (e: TouchEvent) => {
       if (campaignRuntime.status === 'racing') {
         e.preventDefault()
