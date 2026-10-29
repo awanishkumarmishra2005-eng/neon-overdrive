@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import GameScene from './game/GameScene'
+import GameScene from './game/GameScene'  
 import Hud from './ui/Hud'
 import TouchControls from './ui/TouchControls'
 import TopControls from './ui/TopControls'
