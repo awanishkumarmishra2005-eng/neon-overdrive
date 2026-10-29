@@ -1,7 +1,8 @@
-import { campaignRuntime } from '../game/campaign'
+
 import { useEffect, useState } from 'react'
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
 import { IS_MOBILE } from '../config/device'
+import { campaignRuntime } from '../game/campaign'
 import {
   isTouchActive,
   onTouchChange,
@@ -10,7 +11,6 @@ import {
   releaseTouch,
   type TouchControl
 } from '../game/touchInput'
-import { campaignRuntime } from '../game/campaign'
 import Joystick from './Joystick'
 import { useFlightMode, useSettings } from './hooks'
 
@@ -37,7 +37,7 @@ const base: CSSProperties = {
   WebkitTouchCallout: 'none',
   pointerEvents: 'auto',
   cursor: 'pointer'
-} as CSSProperties
+}
 
 function PadButton(props: {
   control: TouchControl
@@ -117,11 +117,13 @@ export default function TouchControls() {
 
     // Release controls after focus loss, tab switching, or rotation.
     const release = () => releaseAllTouch()
+
     const onHidden = () => {
       if (document.hidden) releaseAllTouch()
     }
 
-    // Permit menu scrolling; prevent page scrolling during a race.
+    // Allow campaign-menu scrolling.
+    // Prevent page scrolling only while a race is active.
     const stopMove = (e: TouchEvent) => {
       if (campaignRuntime.status === 'racing') {
         e.preventDefault()
