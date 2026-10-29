@@ -1,34 +1,3 @@
-import { useEffect, useState } from 'react'
-import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
-import { IS_MOBILE } from '../config/device'
-import {
-  isTouchActive, onTouchChange, pressTouch, releaseAllTouch, releaseTouch, type TouchControl
-} from '../game/touchInput'
-import Joystick from './Joystick'
-import { useFlightMode, useSettings } from './hooks'
-
-// Button size scales with the SMALLER screen side, so it works in portrait and landscape.
-const BTN = 'clamp(58px, 15vmin, 104px)'
-const GAP = '2.5vmin'
-
-const base: CSSProperties = {
-  width: BTN, height: BTN, borderRadius: '50%', boxSizing: 'border-box',
-  display: 'flex', alignItems: 'center', justifyContent: 'center',
-  font: '700 clamp(11px, 2.6vmin, 18px) system-ui, sans-serif', letterSpacing: 1,
-  color: '#aef6ff', background: 'rgba(5,12,22,0.5)', border: '2px solid rgba(0,229,255,0.55)',
-  touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none',
-  WebkitTouchCallout: 'none', pointerEvents: 'auto', cursor: 'pointer'
-} as CSSProperties
-
-function PadButton(props: { control: TouchControl; label: string; accent?: string; size?: number; area?: string }) {
-  const { control, label, accent = '0,229,255', size = 1, area } = props
-  const down = isTouchActive(control)
-
-  const start = (e: ReactPointerEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    try { e.currentTarget.setPointerCapture(e.pointerId) } catch { /* not supported: ignore */ }
-    pressTouch(control, e.pointerId)
-  }
   const end = (e: ReactPointerEvent<HTMLDivElement>) => releaseTouch(control, e.pointerId)
 
   const style: CSSProperties = {
@@ -68,8 +37,12 @@ export default function TouchControls() {
     // Nothing may stay pressed after focus loss, tab switch or rotation.
     const release = () => releaseAllTouch()
     const onHidden = () => { if (document.hidden) releaseAllTouch() }
-    // Stop page scroll / pinch zoom / iOS gesture zoom while playing.
-    const stopMove = (e: TouchEvent) => e.preventDefault()
+    // Allow menu scrolling before the race; prevent page scrolling during racing.
+    const stopMove = (e: TouchEvent) => {
+      if (campaignRuntime.status === 'racing') {
+        e.preventDefault()
+      }
+    }
     const stopGesture = (e: Event) => e.preventDefault()
     const stopMenu = (e: Event) => e.preventDefault()
     window.addEventListener('blur', release)
